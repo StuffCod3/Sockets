@@ -2,7 +2,10 @@ package SecondHalf;
 
 import FirstHalf.FirstHalf;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -14,15 +17,15 @@ public class Server {
 
         System.out.println("Client connected");
 
-        Scanner in = new Scanner(socket.getInputStream());
-        while (in.hasNext()){
-            String inputStr = in.nextLine();
-            FirstHalf str = new FirstHalf(inputStr);
-            System.out.println(str.getResult());
-        }
+        InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-        in.close();
-        socket.close();
-        serverSocket.close();
+        FirstHalf str = new FirstHalf(bufferedReader.readLine());
+        System.out.println(str.getResult());
+
+        PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+        printWriter.println(str.getResult());
+        printWriter.flush();
+
     }
 }
